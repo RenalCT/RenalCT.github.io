@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Click Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        #game-area {
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+            position: relative;
+            background-color: #f0f0f0;
+            border: 2px solid #ccc;
+        }
+        #box {
+            width: 50px;
+            height: 50px;
+            background-color: #ff5733;
+            position: absolute;
+            cursor: pointer;
+        }
+        #start-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #start-button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Click Game</h1>
+    <p>Click the box as many times as you can in 10 seconds!</p>
+    <button id="start-button">Start Game</button>
+    <div id="game-area"></div>
+    <p>Score: <span id="score">0</span></p>
+    <script>
+        const startButton = document.getElementById("start-button");
+        const gameArea = document.getElementById("game-area");
+        const scoreDisplay = document.getElementById("score");
+
+        let score = 0;
+        let timer;
+        let box;
+
+        function createBox() {
+            box = document.createElement("div");
+            box.id = "box";
+            box.style.top = `${Math.random() * (gameArea.clientHeight - 50)}px`;
+            box.style.left = `${Math.random() * (gameArea.clientWidth - 50)}px`;
+            box.addEventListener("click", () => {
+                score++;
+                scoreDisplay.textContent = score;
+                gameArea.removeChild(box);
+                createBox();
+            });
+            gameArea.appendChild(box);
+        }
+
+        function startGame() {
+            score = 0;
+            scoreDisplay.textContent = score;
+            startButton.disabled = true;
+            gameArea.innerHTML = "";
+            createBox();
+            timer = setTimeout(() => {
+                endGame();
+            }, 10000); // 10 seconds
+        }
+
+        function endGame() {
+            alert(`Time's up! Your score is: ${score}`);
+            startButton.disabled = false;
+            gameArea.innerHTML = "";
+        }
+
+        startButton.addEventListener("click", startGame);
+    </script>
+</body>
+</html>
